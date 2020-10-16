@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="pt_br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/img/logo.png">
+    <link rel="stylesheet" href="/styles/main.css">
+    <link rel="stylesheet" href="/styles/buys.css">
+    <link rel="stylesheet" href="/styles/animation.css">
+    <link rel="stylesheet" href="/styles/responsive.css">
+    <title>Compras</title>
+</head>
+<body id="page-monitor" class="view">
+    <header>
+        <div class="head-bar">
+            <button class="bt-return"><img src="/img/arrow-left.svg" alt=""></button>
+            <div class="triangle-box">
+                <img id="logo" src="/img/own_fly.png" alt="logo">
+                <div class="triangle">
+                </div>
+            </div>
+            <button class="bt-options"><img src="/img/menu.svg" alt="icon menu"></button>
+        </div>
+    </header>
+    <main id="page-monitor-views">
+        <header class="monitor-box">
+            <div class="statistics">
+                <span>Resultados: <b>{{buys.length}}</b></span>
+                <span>limite: <b>R${{bill.limit}}</b></span>
+                <span>Vencimento: <b></b></span>
+
+            </div>
+            <div class="filter-options" alt="filto">
+                <label for="filter">Filtrar por:</label>
+                <select name="filter" id="filter" alt="Filtro" onchange="filtered()">
+                    
+                        <option  value="buyDate">Data</option>
+                        <option value="value">Valor</option>
+                        <option value="category_id">Categoria</option>
+                </select>
+                
+            </div>
+    
+        </header>
+        <details class="list-translations" open>
+            <div class="ajuste"></div>
+            <summary class="title-list" alt="Lista de traduções">
+                <h2><div class="buys-month"> {{bill.title}}</div></h2><span class="qtd">R${{bill.valueSum}} </span>
+            </summary>
+            
+        {% for b in buys %}
+
+            
+            <div class="translation" id='{{b._id}}'>
+                <div class="title-translation   category_{{b.category}}" >
+                    <h3>{{b.createAt}}  </h3><span class="update">R$ {{b.value}} <a href='/deletebuy/{{bill.id}}/{{b.id}}'><button class='bt-trash'></button></a></span>
+                </div>
+                <span>{{b.description}}</span>
+                
+                <div class="buy-category"></div>
+            </div>
+
+        {% endfor %}
+
+        
+       
+        </details>
+        {% if bill.status === 'Ativo' %}
+        <button class="bt-add">+</button>
+        {% endif %}
+<!-- ////////////////////////////////////////////////////////////// -->
+        <div class="add-popup hide"></div>
+        
+        <fieldset class="add-box hide">
+            <header>
+                <h2>Adicionar compra:</h2>
+                <h2 id="date-now"></h2>
+            </header>
+            <form  action="/savebuy/{{bill.id}}" method="POST" >
+                <div class="ajuste"></div>
+                <div class="field">
+                    <label for="valor">Valor da compra</label>
+                    <input id="buy-value" type="number" name="value" min="0" step="0.05" placeholder="R$" required/>
+                </div>
+                <div class="personalize">
+                    <details class="add-category" >
+                        <summary>
+                            <span>Categoria:</span>
+                            <div></div>
+                        </summary>
+                        <div class='grid-colum'>
+                            {% for c in categoryAll %}
+                            <div class="field-group ">
+                                <input type="radio" name="category" id='{{c.name}}' value="{{c.name}}" {% if (c.type== 'Nenhuma') %}
+                                checked
+                                {% endif %} >
+                                <label for="{{c.name}}">{{c.name}}</label> 
+                            </div>
+                        {% endfor %}
+                        </div>
+                        
+                        
+                    </details>
+                    <details class="add-status">
+                    <summary>
+                        <span>Data Personalidada?</span> 
+                        <div></div>
+                        <!-- <input type="checkbox" name="date-edit" id="date-edit"> -->
+                    </summary>
+                    
+                    <div class="field-group date-time">
+                        <div class="field">
+                            <label for="date">Data:</label>
+                            <input type="date"  name="date" id="add-date">
+                            
+                        </div>
+                        <div class="field">
+                            <label for="time">Hora:</label>
+                            <input type="time" placeholder="date"  name="time" id="add-time">
+                            
+                        </div>
+                    </div>
+                    </details>
+                </div> 
+                <textarea name="description" placeholder="Detalhes" id="buy-description" cols="30" rows="10" required></textarea>
+                <input type="submit" value="Adicionar" id="add-submit">
+            </form>
+        </fieldset>
+        <!-- <div class="sucefull">
+            <div class="check_mark">
+            <div class="sa-icon sa-success animate">
+                <span class="sa-line sa-tip animateSuccessTip"></span>
+                <span class="sa-line sa-long animateSuccessLong"></span>
+                <div class="sa-placeholder"></div>
+                <div class="sa-fix"></div>
+            </div>
+            </div>
+        </div> -->
+
+        <div class="menu-op">
+            <div class="triangle-box">
+                <div class="triangle-up">
+            </div>
+            </div>
+            <ul>
+                <li>Redefinir Limite</li>
+                <li>Redefinir Periodo</li>
+                {% if bill.status=='Ativo' or bill.status=='Fechado' %}
+                
+                    {% if bill.status == "Aberto" %}
+                      <a href='/closebill/{{bill._id}}'>Fechar Conta</a>
+                    {% else %}
+                      <a href='/closebill/{{bill._id}}'>Quitar Conta</a>
+                    {% endif %} 
+                {% endif %}                
+            </ul>
+        </div>
+
+
+
+
+
+        <div class="search-bar">
+            <input type="text" id="search" placeholder="Pesquisar">
+            <button></button>
+        </div>
+
+
+
+
+    </main>
+    <!-- <script>
+    let sucess= document.querySelector('.sucefull')
+    let bg= document.querySelector('.add-popup')
+    if({{ added }}){
+        sucess.classList.remove('hide')
+        bg.classList.remove('hide')
+        setTimeout(()=>{
+            sucess.classList.add('hide')
+            bg.classList.add('hide')
+        },1500)
+    }
+    </script> -->
+
+    <script>
+        function filtered(){
+            var x = document.getElementById("filter")
+            window.location = "/buys/"+{{bill.id}}+'/'+x.value
+        }
+    </script>
+    <script type="module" src="/scripts/buys.js"></script>
+</body>

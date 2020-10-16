@@ -1,0 +1,233 @@
+
+
+main#Register{
+    display: flex;
+    flex-direction: column;
+    margin: 2vh auto;
+    /* border: 1px solid black; */
+    /* height: 70vh; */
+    align-items: center;
+    justify-content: center;
+}
+
+form *{
+    transition: 200ms;
+}
+#formRegister{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+}
+
+form{
+    background-color: var(--color-primary);
+    padding: 25px;
+    padding-top: 10px;
+    border-radius: 8px 8px 0px 0px;
+    display: flex;
+    flex-direction: column;
+    width: 60vw;
+    border: 2px solid var(--color-sec-light);
+
+    border-bottom: 0px solid var(--color-sec-light);
+}
+
+form img{
+    width: 10vw;
+}
+form input,input[type='submit']{
+    padding: 8px;
+    width: 40vw;
+    margin-bottom:8px ;
+    border-radius: 8px;
+    transition: 200ms;
+}
+form input[type='submit']{
+    margin-top: 10px;
+    font-weight: bold;
+    background-color: var(--color-base);
+}
+form input[type='button']{
+    margin-top: 10px;
+    font-weight: bold;
+    background-color: red;
+}
+input:hover, button:hover{
+    border: 2px solid black;
+    font-weight: bold;
+
+}
+input:focus{
+    /* padding: 6px; */
+    border: 2px solid var(--color-base);
+    background-color: whitesmoke;
+    text-align: center;
+    border-radius: 20px;
+}
+button:active{
+    background-color: var(--color-base);
+    border: 2px solid var(--color-base-light);
+    opacity: 80%;
+    color: white;
+    border-radius: 20px;
+}
+
+.selection{
+    display: flex;
+    flex-direction: row;
+    /* justify-content: space-between; */
+    width: 60vw;
+    margin: 0 auto;
+    align-items: center;
+    justify-content: center;
+    
+}
+
+
+.option{
+    padding: 12px;
+    /* background-color: var(--color-background); */
+    width: 30vw;
+    text-align: center;
+    
+    border: 1px solid black;
+    border-top: 2px solid var(--color-sec-light);
+    font-weight: bold;
+}
+.option:hover{
+    opacity: 70%;
+
+}
+.option:active{
+    color: var(--color-base);
+}
+
+.left{
+    border-radius: 0px 0px 0px 8px;
+
+}
+.right{
+    border-radius: 0px 0px 8px 0px;
+
+}
+
+
+
+.active{
+    background-color: var(--color-primary);
+    border: 2px solid var(--color-sec-light);
+    border-top: 1px solid black;
+    color: white;
+    font-weight: bold;
+
+}
+#Register *{
+    transition: 500ms;
+}
+
+
+
+/* responsividade */
+@media screen and (max-width: 1080px) {
+    form{
+        width: 60vw;
+    }
+    form input,input[type='submit']{
+        width: 40vw;
+    }
+    .option{
+     width: 30vw;
+    }
+ }
+ @media screen and (max-width: 300px) {
+     form{
+         width: 90vw;
+     }
+     form input,input[type='submit']{
+         width: 40vw;
+     }
+     .option{
+      width: 45vw;
+     }
+ }
+
+ /*  */
+
+ .bg{
+    /* display: flex; */
+    position: fixed;
+    z-index: 2;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #000000AA;
+}
+.popup-bg{
+    display: flex;
+    position: fixed;
+    z-index: 4;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    transition: 200ms;
+    /* background-color: #000000AA; */
+    
+}
+
+.popup{
+    display: flex;
+    z-index: 5;
+    margin: auto;
+    flex-direction: column;
+    padding: 20px;
+    width: 30vw;
+    height: 35vh;
+    background-color: var(--color-primary);
+    border: 2px solid var(--color-sec-light);
+    border-radius: 8px;
+    transition: 200ms;
+}
+.popup span{
+    margin-top: 10px;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+}
+.popup img{
+    width: 10vw;
+    height: 10vw;
+    position: relative;
+    animation-name: example;
+    animation-duration: 2s;
+    animation-timing-function: linear;
+    animation-delay: 2s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    transform: scale(10vw,5vw);
+  }
+  .popup button{
+      width: 40px;
+      padding: 10px;
+      color: var(--color-primary);
+      background-color: var(--color-base);
+      outline: none;
+  }
+  .popup button:hover{
+    border: 1px solid black;
+    padding: 9px;
+  }
+.popup button:active{
+    background-color: var(--color-base-light);
+    border-radius: 12px;
+    color: white;
+  }
+  
+  @keyframes example {
+    0%  {top:0px;}
+    70% {top:-20px; }
+    100% {top:0px;}
+    /* 75% {top:20px;} */
+    /* 100%{top:0px; } */
+    
+  }

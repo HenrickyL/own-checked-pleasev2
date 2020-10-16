@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="pt_br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/img/logo.png">
+    <link rel="stylesheet" href="/styles/main.css">
+    <link rel="stylesheet" href="/styles/buys.css">
+    <!-- <link rel="stylesheet" href="/styles/index.css"> -->
+    <link rel="stylesheet" href="/styles/month.css">
+    <link rel="stylesheet" href="/styles/responsive.css">
+    <title>Contas</title>
+</head>
+<body id="page-monitor" class="view">
+    <header>
+        <div class="head-bar">
+            <button class="bt-return hide"><img src="/img/arrow-left.svg" alt=""></button>
+            <div class="triangle-box">
+                <img id="logo" src="/img/own_read.png" alt="logo">
+                <div class="triangle">
+                </div>
+            </div>
+            <button class="bt-options"><img src="/img/menu.svg" alt="icon menu"></button>
+        </div>
+    </header>
+    <main id="page-monitor-views">
+        <header class="monitor-box">
+            <div class="statistics">
+                <span><b>Qtd Contas: {{user.bills.length}}</b></span>
+                <p>
+                    <span>Ativas: <b>{{statusBill.actives}}</b></span>
+                    <span>Fechadas:<b>{{statusBill.deactives}}</b></span>
+                    <span>Pagas:<b>{{statusBill.paids}}</b></span>
+
+                </p>
+            </div>
+            <div class="filter-options" alt="filto">
+                <label for="filter">Filtrar por:</label>
+                <select name="filter" id="filter" alt="Filtro" onchange="filtered()">
+                    
+                    <option  value="dateCreate">Data</option>
+                    <option value="title">Title</option>
+                    <option value="valueSum-ASC">Valor ^</option>
+                    <option value="valueSum-DESC">Valor v</option>
+                    <option value="status_id">Status</option>
+
+                </select>
+                
+            </div>
+    
+        </header>
+        <details class="list-translations" open>
+            <div class="ajuste"></div>
+            <summary class="title-list" alt="Lista de traduções">
+                <h2>Contas:</h2><span class="qtd">Total:</span>
+            </summary>
+            
+            {% for b in bills %}
+            
+              {% if b.status == 'Fechado' %}
+                <div class="translation closed">
+              {% elif b.status == 'Pago' %}
+                <div class="translation paid">
+              {% else %}
+                <div class="translation">
+              {% endif %}
+                    <div class="title-translation" >
+                        <h3>{{b.createAt}}</h3>
+                         <h2 class="title"> {{b.title}}</h2>
+                        <span class="update">R$ {{b.valueSum}}<a href='/deletebill/{{b.id}}/{{user._id}}'><button class='bt-trash'></button></a></span>
+                    </div>
+                    <span>{{b.description}}</span>
+                    <div class="buy-category"></div>
+                    <div class='billId hide'>{{b._id}}</div>
+                    <div class="bar">
+                        <div class="total"  
+                            {% if b.valueSum <= b.valueLimit %} style='width:{{b.valueSum/(b.valueLimit+1)*100}}vw'{% else %} style='width:{{b.valueLimit/b.valueSum*100}}vw'{% endif %} ></div>
+                        <div class="limit" >|</div>
+                        {% if  b.limit>0 %}
+                            <div class="extra" style='width:{{ (b.valueSum - b.valueLimit) / b.valueSum*100 }}vw' ></div>
+                        {% endif %}
+                        <a href="/buys/{{b._id}}"><button class='bt-bill'></button></a>
+                        
+                    </div>
+                </div>
+            {% endfor %}
+
+           
+        
+       
+        </details>
+
+        <button class="bt-add">+</button>
+<!-- ////////////////////////////////////////////////////////////// -->
+        <div class="add-popup hide"></div>
+        
+        <fieldset class="add-box hide">
+            <header>
+                <h2>Adicionar Nova Conta:</h2>
+                <h2 id="date-now"></h2>
+            </header>
+            
+            <form action="/savebill" method="POST" >
+                <div class="ajuste"></div>
+                <div class="field">
+                    <label for="title">Titulo da conta</label>
+                    <input id="title" name='title'  type="text" required/>
+                </div>
+                <div class="field" style='display:none'>
+                    <input name='userId'  type="text" value='{{user._id}}' />
+                    
+
+                </div>
+                <div class="personalize">
+                    <details class="add-category" >
+                        <summary>
+                            <span>Periodo:</span>
+                            <div></div>
+                            <!-- <input type="checkbox" name="addPeriod" id="add-period"> -->
+                        </summary>
+                        <div class='grid-colum'>
+                            {% for p in periods %}
+                            <div class="field-group">
+                                <input type="radio" name="period" id='{{p.name}}' value='{{p.name}}' {% if (p.name == 'Um Mês') %}
+                                checked
+                                {% endif %}>
+                                <label for="{{p.name}}">{{p.name}}</label> 
+                            </div>
+                            {% endfor %}
+                        </div>
+                        
+                    </details>
+                    <details class="add-status">
+                    <summary>
+                        <span>Definir Limite:</span> 
+                        <div></div>
+                    </summary>
+                    <div>
+
+                    </div>
+                    <div class="field-group date-time">
+                        <div class="field">
+                            <label for="date">Limite:</label>
+                            <input type="number" min="0" placeholder='R$' name="limit" id="max-value">
+                            
+                        </div>
+                    </div>
+                    </details>
+                </div> 
+                <textarea name="description" placeholder="Detalhes" id="buy-description" cols="30" rows="10"></textarea>
+                <input type="submit" value="Adicionar" id="add-submit">
+            </form>
+        </fieldset>
+
+        <div class="menu-op">
+            <div class="triangle-box">
+                <div class="triangle-up">
+            </div>
+            </div>
+            <ul>
+                <li>Apagar dados</li>
+                <li><a href="/">Log-out</a> </li>
+            </ul>
+        </div>
+
+        <div class="search-bar">
+            <input type="text" id="search" placeholder="Pesquisar">
+            <button></button>
+        </div>
+
+
+
+    </main>
+     <!-- antigo index -->
+     <!-- <div class="introduction" id="app-home">
+        <div id="conectivity">
+            <button id="color-status" alt="conecção" class="disconected"></button>
+        </div>
+    
+        <main id="app-home-views">
+    
+            <h1 alt="titulo">Own</h1>
+            <h3 alt="sub-titulo">Cheked please</h3>
+      
+            <img id="main-logo"  src="/img/logo.png" alt="Logo colorida">
+            <p>Seu APP de gerenciamento de compras.</p>
+            
+            <div>
+                <button class="button-sec" alt="botao contas">Contas</button>
+                <button class="button-main" alt="botao compras" href="">compras</button>
+            </div>
+    
+    
+        </main>
+    </div>
+    <script>
+        let intro=document.querySelector("app-home")
+        setTimeout(()=>{
+            intro.classList.add("hiding")
+        },200)
+    </script>  -->
+    <script>
+        function filtered(){
+            var x = document.getElementById("filter")
+            window.location = "/month/"+x.value
+        }
+    </script>
+    <script type="module" src="/scripts/month.js"></script>
+</body>
