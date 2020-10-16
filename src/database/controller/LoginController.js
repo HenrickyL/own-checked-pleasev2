@@ -23,7 +23,7 @@ export async function CreateUser(req,res){
             const created = await login.create(req.body)
             return res.render('index.html',{error:false, login:false})
         }else{
-            return res.render('sign-in.html',{error:true, login:false})
+            return res.render('index.html',{error:true, login:false})
         }
         
         // return res.redirect(301,`/ok`)
@@ -36,8 +36,8 @@ export async function CreateUser(req,res){
 export async function VerifyLogin(req,res){
     try {
         const user = await login.findOne({username:req.body.username,password:req.body.password})
-        const bills = await bill.find({userId:user._id})
         if(user){//se existir redireciona para a página passado as informações
+            const bills = await bill.find({userId: user._id})
             const statusBill = getStatusBill(bills)
             const periodAll = await periodModel.find()
             const statusAll = await statusModel.find()
